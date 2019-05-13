@@ -1,26 +1,49 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {Component} from 'react';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component{
+  constructor(props) {
+    super(props);
+    this.state = {
+      lists: ['asdf'],
+      input: ''
+    }
+  }
+
+  handleInput = e => {
+    this.setState({ input: e.target.value });
+  };
+
+  handleKeyPress = e => {
+    if (e.key === 'Enter') {
+      this.setState({ lists: [...new Set([...this.state.lists, this.state.input])], input: '' });
+    }
+  }
+
+  handleDelete = email => {
+    this.setState({ lists: this.state.lists.filter((ele) => ele !== email) })
+  }
+
+  render() {
+    const { lists, input } = this.state;
+    return (
+      <div className="container">
+        {lists.map((ele, index) => {
+          return <div className="tag" key={index}>
+            {ele}
+            <button class="fas fa-backspace" onClick={() => this.handleDelete(ele)}></button>
+          </div>
+        })}
+        <input 
+          placeholder="type in new tag here" 
+          className="input"
+          onChange={this.handleInput} 
+          value={input} 
+          onKeyPress={this.handleKeyPress}
+        ></input>
+      </div>
+    );
+  }
 }
 
 export default App;
